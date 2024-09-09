@@ -1,7 +1,4 @@
 
-using Microsoft.EntityFrameworkCore;
-using WishList.Data;
-
 namespace WishList
 {
 	public class Program
@@ -11,12 +8,11 @@ namespace WishList
 			var builder = WebApplication.CreateBuilder(args);
 
 			// Add services to the container.
+
 			builder.Services.AddControllers();
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
-
-			builder.Services.AddDbContext<WishDbContext>(options => options.UseInMemoryDatabase("WishDb"));
 
 			var app = builder.Build();
 
