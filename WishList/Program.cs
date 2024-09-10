@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using WishList.ApplicationDbContext;
 using WishList.Models;
+using WishList.Repositories;
+using WishList.Services;
 
 namespace WishList
 {
@@ -21,6 +23,9 @@ namespace WishList
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
+
+			builder.Services.AddTransient<IWishRepository, WishRepository>();
+			builder.Services.AddScoped<IWishService, WishService>();
 
 			var app = builder.Build();
 
