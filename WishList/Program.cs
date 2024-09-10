@@ -15,7 +15,8 @@ namespace WishList
 
 			builder.Services.AddControllers();
 
-			builder.Services.AddDbContext<WishDbContext>(options => options.UseInMemoryDatabase("WishDb"));
+			builder.Services.AddDbContext<WishDbContext>(options => 
+				options.UseInMemoryDatabase("WishDb"));
 
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
