@@ -1,4 +1,5 @@
-﻿using WishList.ApplicationDbContext;
+﻿using Microsoft.EntityFrameworkCore;
+using WishList.ApplicationDbContext;
 using WishList.Models;
 
 namespace WishList.Repositories;
@@ -17,9 +18,9 @@ public class WishRepository : IWishRepository
 		await _context.SaveChangesAsync();
 	}
 
-	public Task<ICollection<Wish>> GetAll()
+	public async Task<ICollection<Wish>> GetAll()
 	{
-		throw new NotImplementedException();
+		return await _context.Wishes.ToListAsync();
 	}
 
 	public async Task<Wish> GetById(Guid id)
