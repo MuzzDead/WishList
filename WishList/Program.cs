@@ -52,6 +52,7 @@ namespace WishList
 
 			builder.Services.AddTransient<IWishRepository, WishRepository>();
 			builder.Services.AddScoped<IWishService, WishService>();
+			builder.Services.AddSingleton<JwtTokenGenerator>();
 
 			var app = builder.Build();
 
