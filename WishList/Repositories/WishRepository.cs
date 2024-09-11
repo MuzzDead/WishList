@@ -6,8 +6,8 @@ namespace WishList.Repositories;
 
 public class WishRepository : IWishRepository
 {
-	private readonly WishDbContext _context;
-	public WishRepository(WishDbContext context)
+	private readonly AppDbContext _context;
+	public WishRepository(AppDbContext context)
 	{
 		_context = context;
 	}

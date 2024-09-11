@@ -20,7 +20,7 @@ namespace WishList
 
 			builder.Services.AddControllers();
 
-			builder.Services.AddDbContext<WishDbContext>(options =>
+			builder.Services.AddDbContext<AppDbContext>(options =>
 				options.UseInMemoryDatabase("WishDb"));
 
 			var jwtSettings = builder.Configuration.GetSection("JwtSettings");
@@ -52,6 +52,7 @@ namespace WishList
 
 			builder.Services.AddTransient<IWishRepository, WishRepository>();
 			builder.Services.AddScoped<IWishService, WishService>();
+			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddSingleton<JwtTokenGenerator>();
 
 			var app = builder.Build();
