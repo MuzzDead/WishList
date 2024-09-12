@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WishList.Models;
 using WishList.Services;
@@ -7,6 +8,7 @@ namespace WishList.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
+[Authorize]
 public class WishController : ControllerBase
 {
 	private readonly IWishService _wishService;
@@ -15,6 +17,7 @@ public class WishController : ControllerBase
 		_wishService = wishService;
 	}
 
+	[AllowAnonymous]
 	[HttpGet]
 	public async Task<IActionResult> GetWishes()
 	{
@@ -22,6 +25,7 @@ public class WishController : ControllerBase
 		return Ok(wishes);
 	}
 
+	[AllowAnonymous]
 	[HttpGet("{id:guid}")]
 	public async Task<IActionResult> GetWishById(Guid id)
 	{
@@ -30,8 +34,6 @@ public class WishController : ControllerBase
 
 		return Ok(wish);
 	}
-
-
 
 	[HttpPost]
 	public async Task<IActionResult> AddWish([FromBody] Wish model)

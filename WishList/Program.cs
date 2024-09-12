@@ -1,12 +1,16 @@
 
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Swashbuckle.AspNetCore.Swagger;
+using Swashbuckle.AspNetCore.SwaggerGen;
 using System.Text;
 using WishList.ApplicationDbContext;
 using WishList.Models;
 using WishList.Repositories;
 using WishList.Services;
+using WishList.Swagger;
 
 namespace WishList
 {
@@ -49,10 +53,12 @@ namespace WishList
 			// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen();
+			builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
+
+			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddTransient<IWishRepository, WishRepository>();
 			builder.Services.AddScoped<IWishService, WishService>();
-			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddSingleton<JwtTokenGenerator>();
 
 			var app = builder.Build();

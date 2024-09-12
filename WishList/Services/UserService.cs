@@ -20,7 +20,7 @@ namespace WishList.Services
 
 		public async Task<User> GetUserByUsername(string username)
 		{
-			return await _appDbContext.Users.SingleOrDefaultAsync(u => u.Name == username);
+			return await _appDbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
 		}
 	}
 }
