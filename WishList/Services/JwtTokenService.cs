@@ -5,11 +5,11 @@ using System.Text;
 
 namespace WishList.Services;
 
-public class JwtTokenGenerator
+public class JwtTokenService
 {
 	private readonly IConfiguration _configuration;
 
-	public JwtTokenGenerator(IConfiguration configuration)
+	public JwtTokenService(IConfiguration configuration)
 	{
 		_configuration = configuration;
 	}
@@ -36,4 +36,23 @@ public class JwtTokenGenerator
 
 		return new JwtSecurityTokenHandler().WriteToken(token);
 	}
+
+	/*public Guid GetUserIdFromTeken(ClaimsPrincipal user) // BUGS!!!!!
+	{
+		if (user == null || !user.Identity.IsAuthenticated)
+		{
+			throw new UnauthorizedAccessException("User is not authenticated.");
+		}
+
+		// Отримуємо User ID із токену
+		var userIdString = user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+		// Перевіряємо, чи User ID є правильним GUID
+		if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
+		{
+			throw new FormatException("Invalid GUID format in token.");
+		}
+
+		return userId;
+	}*/
 }

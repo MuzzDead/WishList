@@ -10,9 +10,9 @@ namespace WishList.Controllers;
 [ApiController]
 public class AccountController : ControllerBase
 {
-	private readonly JwtTokenGenerator _jwtTokenGenerator;
+	private readonly JwtTokenService _jwtTokenGenerator;
 	private readonly IUserService _userService;
-	public AccountController(JwtTokenGenerator jwtTokenGenerator, IUserService userService)
+	public AccountController(JwtTokenService jwtTokenGenerator, IUserService userService)
 	{
 		_jwtTokenGenerator = jwtTokenGenerator;
 		_userService = userService;

@@ -19,13 +19,15 @@ namespace WishList
 		public static void Main(string[] args)
 		{
 			var builder = WebApplication.CreateBuilder(args);
+			var connectionString = builder.Configuration.GetConnectionString("Default") ?? throw new InvalidOperationException("Connection string 'Default' not found.");
+
 
 			// Add services to the container.
 
 			builder.Services.AddControllers();
 
 			builder.Services.AddDbContext<AppDbContext>(options =>
-				options.UseInMemoryDatabase("WishDb"));
+				options.UseSqlServer(connectionString));
 
 			var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 
@@ -59,7 +61,7 @@ namespace WishList
 			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddTransient<IWishRepository, WishRepository>();
 			builder.Services.AddScoped<IWishService, WishService>();
-			builder.Services.AddSingleton<JwtTokenGenerator>();
+			builder.Services.AddSingleton<JwtTokenService>();
 
 			var app = builder.Build();
 
