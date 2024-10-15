@@ -67,7 +67,7 @@ public class WishRepository : IWishRepository
 		}
 	}
 
-	public async Task SelectWish(Guid id, Guid userId, Wish model)
+	public async Task SelectWish(Guid id, Guid userId)
 	{
 		var wish = await GetById(id);
 

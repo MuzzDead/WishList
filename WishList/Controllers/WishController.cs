@@ -40,7 +40,7 @@ public class WishController : ControllerBase
 
 	
 	[HttpPut("select/{id:guid}")]
-	public async Task<IActionResult> SelectWish(Guid id, [FromBody]Wish model)
+	public async Task<IActionResult> SelectWish(Guid id)
 	{
 		var userId = GetUserId();
 
@@ -49,7 +49,7 @@ public class WishController : ControllerBase
 		if (wish == null) return NotFound();
 		if (wish.UserId == userId) return BadRequest();
 
-		await _wishService.SelectWish(id, userId, model);
+		await _wishService.SelectWish(id, userId);
 		return Ok();
 	}
 

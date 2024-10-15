@@ -58,9 +58,9 @@ public class WishService : IWishService
 		return await _wishRepository.GetAll();
 	}
 
-	public async Task SelectWish(Guid id, Guid userId, Wish model)
+	public async Task SelectWish(Guid id, Guid userId)
 	{
-		await _wishRepository.SelectWish(id, userId, model);
+		await _wishRepository.SelectWish(id, userId);
 	}
 
 	public async Task UpdateWish(Guid id, CreateUpdateWishDTO model)
