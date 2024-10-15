@@ -13,7 +13,7 @@ public class WishRepository : IWishRepository
 		_context = context;
 	}
 
-	public async Task Add(Wish wish)
+	public async Task AddWishAsync(Wish wish)
 	{
 		await _context.Wishes.AddAsync(wish);
 		await _context.SaveChangesAsync();
@@ -57,7 +57,7 @@ public class WishRepository : IWishRepository
 		return userWishes;
 	}
 
-	public async Task Remove(Guid id)
+	public async Task RemoveAsync(Guid id)
 	{
 		var wish = await GetById(id);
 		if (wish != null)
@@ -80,7 +80,7 @@ public class WishRepository : IWishRepository
 		}
 	}
 
-	public async Task Update(Guid id, Wish wishModel)
+	public async Task UpdateAsync(Guid id, Wish wishModel)
 	{
 		var wish = await GetById(id);
 		if (wish != null)

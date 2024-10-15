@@ -14,13 +14,13 @@ public class JwtTokenService
 		_configuration = configuration;
 	}
 
-	public string GenerateToken(string userId)
+	public string GenerateToken(Guid userId)
 	{
 		var jwtSettings = _configuration.GetSection("JwtSettings");
 
 		var claims = new[]
 		{
-			new Claim(JwtRegisteredClaimNames.Sub, userId),
+			new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
 			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 		};
 

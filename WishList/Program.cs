@@ -58,6 +58,7 @@ namespace WishList
 			builder.Services.AddTransient<IConfigureOptions<SwaggerGenOptions>, ConfigureSwaggerOptions>();
 
 
+			builder.Services.AddTransient<IUserRepository, UserRepository>();
 			builder.Services.AddScoped<IUserService, UserService>();
 			builder.Services.AddTransient<IWishRepository, WishRepository>();
 			builder.Services.AddScoped<IWishService, WishService>();

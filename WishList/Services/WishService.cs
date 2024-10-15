@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using WishList.Models;
+using WishList.Models.DTOs;
 using WishList.Repositories;
 
 namespace WishList.Services;
@@ -12,14 +13,22 @@ public class WishService : IWishService
 		_wishRepository = wishRepository;
 	}
 
-	public async Task AddWish(Wish wish)
+	public async Task AddWish(CreateUpdateWishDTO model)
 	{
-		await _wishRepository.Add(wish);
+		var wish = new Wish
+		{
+			ImageUrl = model.ImageUrl,
+			Title = model.Title,
+			Description = model.Description,
+			UserId = (Guid)model.UserId
+		};
+
+		await _wishRepository.AddWishAsync(wish);
 	}
 
 	public async Task DeleteWish(Guid id)
 	{
-		await _wishRepository.Remove(id);
+		await _wishRepository.RemoveAsync(id);
 	}
 
 	public async Task<ICollection<Wish>> GetSelectedWishes(Guid id)
@@ -54,9 +63,17 @@ public class WishService : IWishService
 		await _wishRepository.SelectWish(id, userId, model);
 	}
 
-	public async Task UpdateWish(Guid id, Wish wish)
+	public async Task UpdateWish(Guid id, CreateUpdateWishDTO model)
 	{
-		await _wishRepository.Update(id, wish);
+		var wish = new Wish
+		{
+			ImageUrl = model.ImageUrl,
+			Title = model.Title,
+			Description = model.Description,
+			UserId = (Guid)model.UserId
+		};
+
+		await _wishRepository.UpdateAsync(id, wish);
 	}
 
 

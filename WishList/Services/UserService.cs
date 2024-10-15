@@ -1,26 +1,68 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using WishList.ApplicationDbContext;
 using WishList.Models;
+using WishList.Models.DTOs;
+using WishList.Repositories;
 
-namespace WishList.Services
+namespace WishList.Services;
+
+public class UserService : IUserService
 {
-	public class UserService : IUserService
+	private readonly IUserRepository _userRepository;
+	private readonly JwtTokenService _jwtTokenService;
+	public UserService(IUserRepository userRepository, JwtTokenService jwtTokenService)
 	{
-		private readonly AppDbContext _appDbContext;
-		public UserService(AppDbContext appDbContext)
-		{
-			_appDbContext = appDbContext;
-		}
+		_userRepository = userRepository;
+		_jwtTokenService = jwtTokenService;
+	}
 
-		public async Task AddUser(User user)
-		{
-			_appDbContext.Users.Add(user);
-			await _appDbContext.SaveChangesAsync();
-		}
 
-		public async Task<User> GetUserByUsername(string username)
+	public async Task DeleteUser(Guid userId)
+	{
+		await _userRepository.RemoveUserAsync(userId);
+	}
+
+	public async Task<User> GetUserById(Guid userId)
+	{
+		return await _userRepository.GetUserById(userId);
+	}
+
+	public async Task<User> GetUserByUsername(string username)
+	{
+		return await _userRepository.GetUserByUsername(username);
+	}
+
+	public async Task<(bool IsSuccess, string Message, string Token)> RegisterUser(RegisterUserDTO model)
+	{
+		var existedUser = await _userRepository.GetUserByUsername(model.Username);
+		if (existedUser != null) { return (false, "User with this Username already exists", null); }
+
+		var user = new User
 		{
-			return await _appDbContext.Users.SingleOrDefaultAsync(u => u.Username == username);
-		}
+			Username = model.Username,
+			PasswordHash = BCrypt.Net.BCrypt.HashPassword(model.Password),
+			Role = "User"
+		};
+
+		await _userRepository.AddUserAsync(user);
+
+
+		var jwtToken = _jwtTokenService.GenerateToken(user.Id);
+
+		return (true, "Success!", jwtToken);
+	}
+
+	public async Task<(bool IsSuccess, string Message, string Token)> LoginUser(LoginUserDTO model)
+	{
+		var user = await _userRepository.GetUserByUsername(model.Username);
+		if (user == null) { return (false, "User not Found!", null); }
+
+		var IsPasswordValid = BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash);
+		if (!IsPasswordValid) { return (false, "Invalid password!", null); }
+
+
+		var jwtToken = _jwtTokenService.GenerateToken(user.Id);
+
+		return (true, "Success!", jwtToken);
 	}
 }

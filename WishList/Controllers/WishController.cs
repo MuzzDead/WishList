@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WishList.ApplicationDbContext;
 using WishList.Models;
+using WishList.Models.DTOs;
 using WishList.Services;
 
 namespace WishList.Controllers;
@@ -76,17 +77,14 @@ public class WishController : ControllerBase
 	{
 		string userIdString = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
+		var userId = Guid.Parse(userIdString);
 
-		var user = _wishService.GetUserIdByName(userIdString);
-		if (user == null) return Guid.Empty;
-
-		return user;
+		return userId;
 	}
 
 
-
 	[HttpPost]
-	public async Task<IActionResult> CreateWish([FromBody] Wish model)
+	public async Task<IActionResult> CreateWish([FromBody] CreateUpdateWishDTO model)
 	{
 		if (!ModelState.IsValid) return BadRequest(ModelState);
 
@@ -103,7 +101,7 @@ public class WishController : ControllerBase
 	}
 
 	[HttpPut("{id:guid}")]
-	public async Task<IActionResult> UpdateWish(Guid id, [FromBody] Wish model)
+	public async Task<IActionResult> UpdateWish(Guid id, [FromBody] CreateUpdateWishDTO model)
 	{
 		if (!ModelState.IsValid) return BadRequest(ModelState);
 

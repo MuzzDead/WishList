@@ -1,6 +1,6 @@
-﻿namespace WishList.Models;
+﻿namespace WishList.Models.DTOs;
 
-public class LoginModel
+public class LoginUserDTO
 {
 	public string Username { get; set; }
 	public string Password { get; set; }

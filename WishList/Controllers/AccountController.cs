@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WishList.Models;
+using WishList.Models.DTOs;
 using WishList.Services;
 
 namespace WishList.Controllers;
@@ -10,35 +11,30 @@ namespace WishList.Controllers;
 [ApiController]
 public class AccountController : ControllerBase
 {
-	private readonly JwtTokenService _jwtTokenGenerator;
 	private readonly IUserService _userService;
-	public AccountController(JwtTokenService jwtTokenGenerator, IUserService userService)
+	public AccountController(IUserService userService)
 	{
-		_jwtTokenGenerator = jwtTokenGenerator;
 		_userService = userService;
 	}
 
 	[HttpPost("login")]
-	public async Task<IActionResult> Login([FromBody] LoginModel model)
+	public async Task<IActionResult> Login([FromBody] LoginUserDTO model)
 	{
 		if (!ModelState.IsValid) { return BadRequest(); }
 
-		var user = await _userService.GetUserByUsername(model.Username);
-		if (user == null)
+		var result = await _userService.LoginUser(model);
+		if (!result.IsSuccess)
 		{
-			return NotFound("User not Found!");
+			return BadRequest(result.Message);
 		}
 
-		var passwordValid = BCrypt.Net.BCrypt.Verify(model.Password, user.PasswordHash);
-		if (!passwordValid) { return BadRequest("Passwords don`t match!"); }
 
-		var token = _jwtTokenGenerator.GenerateToken(model.Username);
-		return Ok(new { Token = token });
+		return Ok(new { Token = result.Token });
 	}
 
 
 	[HttpPost("register")]
-	public async Task<IActionResult> Register([FromBody] RegisterModel model)
+	public async Task<IActionResult> Register([FromBody] RegisterUserDTO model)
 	{
 		if (!ModelState.IsValid) { return BadRequest(); }
 
@@ -48,19 +44,31 @@ public class AccountController : ControllerBase
 			return BadRequest("Wrong Username or Password!");
 		}
 
-		var hashedPassword = BCrypt.Net.BCrypt.HashPassword(model.Password);
-
-		var newUser = new User
+		var result = await _userService.RegisterUser(model);
+		if (!result.IsSuccess)
 		{
-			Username = model.Username,
-			PasswordHash = hashedPassword
-		};
-
-		await _userService.AddUser(newUser);
-
-		var token = _jwtTokenGenerator.GenerateToken(newUser.Username);
+			return BadRequest(result.Message);
+		}
 
 
-		return Ok(new { Token = token });
+		return Ok(new { Token = result.Token });
+	}
+
+
+	[HttpDelete]
+	public async Task<IActionResult> DeleteUser(Guid userId)
+	{
+		var user = await _userService.GetUserById(userId);
+		if (user == null) { return NotFound(); }
+
+		await _userService.DeleteUser(userId);
+		return Ok();
+	}
+
+	[HttpGet("userid/{userId:guid}")]
+	public async Task<IActionResult> GetUserById(Guid userId)
+	{
+		var result = await _userService.GetUserById(userId);
+		return Ok(result);
 	}
 }
