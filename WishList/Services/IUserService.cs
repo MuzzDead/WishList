@@ -7,6 +7,7 @@ public interface IUserService
 {
 	Task<User> GetUserByUsername(string username);
 	Task<User> GetUserById(Guid userId);
+	Task<IEnumerable<UserDTO>> SearchUsers(string searchString);
 	Task DeleteUser(Guid userId);
 
 	Task<(bool IsSuccess, string Message, string Token)> RegisterUser(RegisterUserDTO model);

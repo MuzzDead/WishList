@@ -85,6 +85,8 @@ public class WishRepository : IWishRepository
 		var wish = await GetById(id);
 		if (wish != null)
 		{
+			wish.ImageUrl = wishModel.ImageUrl;
+			wish.Title = wishModel.Title;
 			wish.Description = wishModel.Description;
 		}
 

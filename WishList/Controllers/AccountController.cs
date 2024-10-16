@@ -71,4 +71,18 @@ public class AccountController : ControllerBase
 		var result = await _userService.GetUserById(userId);
 		return Ok(result);
 	}
+
+	[HttpGet("search")]
+	public async Task<IActionResult> SearchUsers(string searchStrig)
+	{
+		if (string.IsNullOrWhiteSpace(searchStrig))
+		{
+			return BadRequest("Search field cannot be empty.");
+		}
+
+		var users = await _userService.SearchUsers(searchStrig);
+		if (users == null) { return NotFound("It's impossible to find users with those names!"); }
+
+		return Ok(users);
+	}
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Validations;
 using WishList.ApplicationDbContext;
 using WishList.Models;
 using WishList.Models.DTOs;
@@ -64,5 +65,17 @@ public class UserService : IUserService
 		var jwtToken = _jwtTokenService.GenerateToken(user.Id);
 
 		return (true, "Success!", jwtToken);
+	}
+
+	public async Task<IEnumerable<UserDTO>> SearchUsers(string searchString)
+	{
+		var users = await _userRepository.SearchUsersAsync(searchString);
+
+		return users.Select(user => new UserDTO
+		{
+			Id = user.Id,
+			Username = user.Username,
+			CreatedAt = user.CreatedAt
+		});
 	}
 }
