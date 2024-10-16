@@ -9,6 +9,6 @@ namespace WishList.Repositories
 		Task<User> GetUserById(Guid userId);
 		Task<IEnumerable<User>> GetAllUsers();
 		Task<User> GetUserByUsername(string userName);
-		Task<ICollection<User>> SearchUsersAsync(string searchString);
+		Task<IEnumerable<User>> SearchUsersAsync(string searchString);
 	}
 }

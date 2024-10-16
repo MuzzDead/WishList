@@ -40,7 +40,7 @@ namespace WishList.Repositories
 			await _appDbContext.SaveChangesAsync();
 		}
 
-		public async Task<ICollection<User>> SearchUsersAsync(string searchString)
+		public async Task<IEnumerable<User>> SearchUsersAsync(string searchString)
 		{
 			int pageNum = 1;
 			int pageSize = 10;
