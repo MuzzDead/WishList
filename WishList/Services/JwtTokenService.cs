@@ -14,15 +14,16 @@ public class JwtTokenService
 		_configuration = configuration;
 	}
 
-	public string GenerateToken(Guid userId)
+	public string GenerateToken(Guid userId, string username)
 	{
 		var jwtSettings = _configuration.GetSection("JwtSettings");
 
 		var claims = new[]
 		{
-			new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
-			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-		};
+		new Claim(JwtRegisteredClaimNames.Sub, userId.ToString()),
+		new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+		new Claim("username", username)  // Додаємо username в claims
+    };
 
 		var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Secret"]));
 		var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

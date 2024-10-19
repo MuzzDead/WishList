@@ -24,6 +24,17 @@ namespace WishList
 
 			// Add services to the container.
 
+
+			builder.Services.AddCors(options =>
+			{
+				options.AddPolicy(name: "_wishOrigin", policy =>
+				{
+					policy.WithOrigins("http://localhost:3000")
+					.AllowAnyHeader()
+					.AllowAnyMethod();
+				});
+			});
+
 			builder.Services.AddControllers();
 
 			builder.Services.AddDbContext<AppDbContext>(options =>
@@ -78,6 +89,7 @@ namespace WishList
 			app.UseAuthentication();
 			app.UseAuthorization();
 
+			app.UseCors("_wishOrigin");
 
 			app.MapControllers();
 
