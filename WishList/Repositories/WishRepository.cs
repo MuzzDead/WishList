@@ -19,6 +19,31 @@ public class WishRepository : IWishRepository
 		await _context.SaveChangesAsync();
 	}
 
+	public async Task DeselectWish(Guid id, Guid userId)
+	{
+		var wish = await GetById(id);
+		if (wish != null && wish.IsSelected == true)
+		{
+			wish.IsSelected = false;
+			wish.SelectedByUserId = null;
+
+			await _context.SaveChangesAsync();
+		}
+	}
+
+	public async Task SelectWish(Guid id, Guid userId)
+	{
+		var wish = await GetById(id);
+
+		if (wish != null && wish.IsSelected == false)
+		{
+			wish.IsSelected = true;
+			wish.SelectedByUserId = userId;
+
+			await _context.SaveChangesAsync();
+		}
+	}
+
 	public async Task<ICollection<Wish>> GetAll()
 	{
 		return await _context.Wishes.ToListAsync();
@@ -67,18 +92,6 @@ public class WishRepository : IWishRepository
 		}
 	}
 
-	public async Task SelectWish(Guid id, Guid userId)
-	{
-		var wish = await GetById(id);
-
-		if (wish != null && wish.IsSelected == false)
-		{
-			wish.IsSelected = true;
-			wish.SelectedByUserId = userId;
-
-			await _context.SaveChangesAsync();
-		}
-	}
 
 	public async Task UpdateAsync(Guid id, Wish wishModel)
 	{

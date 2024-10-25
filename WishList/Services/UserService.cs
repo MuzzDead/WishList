@@ -48,7 +48,7 @@ public class UserService : IUserService
 		await _userRepository.AddUserAsync(user);
 
 
-		var jwtToken = _jwtTokenService.GenerateToken(user.Id);
+		var jwtToken = _jwtTokenService.GenerateToken(user.Id, user.Username);
 
 		return (true, "Success!", jwtToken);
 	}
@@ -62,7 +62,7 @@ public class UserService : IUserService
 		if (!IsPasswordValid) { return (false, "Invalid password!", null); }
 
 
-		var jwtToken = _jwtTokenService.GenerateToken(user.Id);
+		var jwtToken = _jwtTokenService.GenerateToken(user.Id, user.Username);
 
 		return (true, "Success!", jwtToken);
 	}

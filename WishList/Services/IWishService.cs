@@ -12,6 +12,7 @@ public interface IWishService
 	Task DeleteWish(Guid id);
 	Task UpdateWish(Guid id, CreateUpdateWishDTO model);
 	Task SelectWish(Guid id, Guid userId);
+	Task DeselectWish(Guid id, Guid userId);
 	Task<ICollection<Wish>> GetUserWishes(Guid id);
 	Task<ICollection<Wish>> GetSelectedWishes(Guid id);
 

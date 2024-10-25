@@ -29,7 +29,7 @@ public class AccountController : ControllerBase
 		}
 
 
-		return Ok(new { Token = result.Token });
+		return Ok(new { Token = result.Token, Username = model.Username});
 	}
 
 
@@ -51,7 +51,7 @@ public class AccountController : ControllerBase
 		}
 
 
-		return Ok(new { Token = result.Token });
+		return Ok(new { Token = result.Token, Username = model.Username });
 	}
 
 

@@ -53,8 +53,22 @@ public class WishController : ControllerBase
 		return Ok();
 	}
 
+	[HttpPut("deselect/{id:guid}")]
+	public async Task<IActionResult> DeselectWish(Guid id)
+	{
+		var userId = GetUserId();
+
+		var wish = await _wishService.GetWishById(id);
+
+		if (wish == null) return NotFound();
+		if(wish.SelectedByUserId != userId) return BadRequest();
+
+		await _wishService.DeselectWish(id, userId);
+		return Ok();
+	}
+
 	[AllowAnonymous]
-	[HttpGet("sected-wishes/{userId:guid}")]
+	[HttpGet("selected-wishes/{userId:guid}")]
 	public async Task<IActionResult> GetSelectedWish(Guid userId)
 	{
 		var selectedWishes = await _wishService.GetSelectedWishes(userId);

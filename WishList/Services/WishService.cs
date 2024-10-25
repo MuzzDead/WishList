@@ -31,6 +31,7 @@ public class WishService : IWishService
 		await _wishRepository.RemoveAsync(id);
 	}
 
+
 	public async Task<ICollection<Wish>> GetSelectedWishes(Guid id)
 	{
 		return await _wishRepository.GetSelectedWishByUserId(id);
@@ -61,6 +62,10 @@ public class WishService : IWishService
 	public async Task SelectWish(Guid id, Guid userId)
 	{
 		await _wishRepository.SelectWish(id, userId);
+	}
+	public async Task DeselectWish(Guid id, Guid userId)
+	{
+		await _wishRepository.DeselectWish(id, userId);
 	}
 
 	public async Task UpdateWish(Guid id, CreateUpdateWishDTO model)
